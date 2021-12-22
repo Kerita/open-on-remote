@@ -33,6 +33,7 @@ const completedUrl = `https://${repositoryUrl.replace(
   '/',
 )}/tree/${currentBranch}`;
 
-console.debug('Open on remote in default browser: \n', completedUrl);
+// eslint-disable-next-line no-console
+console.log('Open on remote in default browser: \n', completedUrl);
 
 cp.spawn('open', [completedUrl]);

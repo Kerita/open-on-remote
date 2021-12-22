@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var cp = require("child_process");
@@ -21,5 +22,6 @@ if (!repositoryUrl) {
     throw new Error('Could not find repository url');
 }
 var completedUrl = "https://" + repositoryUrl.replace(':', '/') + "/tree/" + currentBranch;
-console.debug('Open on remote in default browser: \n', completedUrl);
+// eslint-disable-next-line no-console
+console.log('Open on remote in default browser: \n', completedUrl);
 cp.spawn('open', [completedUrl]);
