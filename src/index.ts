@@ -1,5 +1,4 @@
 import cp = require('child_process');
-import os = require('os');
 
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
@@ -32,6 +31,6 @@ const completedUrl = `https://${repositoryUrl.replace(
   '/',
 )}/tree/${currentBranch}`;
 
-console.log('Open on remote in default browser: \n', completedUrl);
+console.debug('Open on remote in default browser: \n', completedUrl);
 
 cp.spawn('open', [completedUrl]);
