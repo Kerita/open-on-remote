@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import cp = require('child_process');
 
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
