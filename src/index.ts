@@ -20,13 +20,18 @@ if (!currentBranch) {
   throw new Error('Could not find current branch');
 }
 
-const remoteUrlRegExp = /^git@(.*).git$/;
+// support SSH mode and HTTP mode
+const remoteUrlRegExp = /^(git@|https:\/\/)(.*).git$/;
 const matchResult = remoteUrl.match(remoteUrlRegExp);
-const repositoryUrl = matchResult?.length ? matchResult[1] : '';
+const repositoryUrl = matchResult?.length ? matchResult[2] : '';
+
+console.log('kerita log:', matchResult, 'matchResult');
 
 if (!repositoryUrl) {
   throw new Error('Could not find repository url');
 }
+
+console.log('kerita log:', repositoryUrl, 'repositoryUrl');
 
 const completedUrl = `https://${repositoryUrl.replace(
   ':',
