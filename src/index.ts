@@ -1,4 +1,5 @@
 import cp = require('child_process');
+import os = require('os');
 
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
@@ -13,6 +14,24 @@ if (!remoteUrl) {
 const commandForCurrentBranch = git(['rev-parse', '--abbrev-ref', 'HEAD']);
 
 const currentBranch = commandForCurrentBranch.stdout.toString().trim();
+
 if (!currentBranch) {
   throw new Error('Could not find current branch');
 }
+
+const remoteUrlRegExp = /^git@(.*).git$/;
+const matchResult = remoteUrl.match(remoteUrlRegExp);
+const repositoryUrl = matchResult?.length ? matchResult[1] : '';
+
+if (!repositoryUrl) {
+  throw new Error('Could not find repository url');
+}
+
+const completedUrl = `https://${repositoryUrl.replace(
+  ':',
+  '/',
+)}/tree/${currentBranch}`;
+
+console.log('Open on remote in default browser: \n', completedUrl);
+
+cp.spawn('open', [completedUrl]);
