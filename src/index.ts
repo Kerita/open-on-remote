@@ -5,7 +5,7 @@ import cp = require('child_process');
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
 
-export default function openOnRemote() {
+export default function openOnRemote(): void {
   const commandForRemoteUrl = git(['config', '--get', 'remote.origin.url']);
   const remoteUrl = commandForRemoteUrl.stdout.toString().trim();
 
