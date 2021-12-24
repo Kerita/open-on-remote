@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import cp = require('child_process');
+import process = require('process');
 
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
@@ -38,7 +39,14 @@ export default function openOnRemote(): void {
   // eslint-disable-next-line no-console
   console.log('Open on remote in default browser: \n', completedUrl);
 
-  cp.spawn('open', [completedUrl]);
+  const start =
+    process.platform == 'darwin'
+      ? 'open'
+      : process.platform == 'win32'
+      ? 'start'
+      : 'xdg-open';
+
+  cp.exec(start + ' ' + completedUrl);
 }
 
 openOnRemote();
