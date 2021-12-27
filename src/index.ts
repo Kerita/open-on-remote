@@ -3,8 +3,22 @@
 import cp = require('child_process');
 import process = require('process');
 
+console.log(process.argv);
+
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
+
+const getArgMap = (): { [key: string]: string } => {
+  const args = process.argv.slice(2);
+  const argMap: { [key: string]: string } = {};
+  args.forEach((item: string) => {
+    const [key, value] = item.split('=');
+    if (key && value) {
+      argMap[key] = value;
+    }
+  });
+  return argMap;
+};
 
 export default function openOnRemote(): void {
   const commandForRemoteUrl = git(['config', '--get', 'remote.origin.url']);
@@ -14,13 +28,18 @@ export default function openOnRemote(): void {
     throw new Error('Could not find remote url');
   }
 
+  const argMap = getArgMap();
+
   const commandForCurrentBranch = git(['rev-parse', '--abbrev-ref', 'HEAD']);
-
-  const currentBranch = commandForCurrentBranch.stdout.toString().trim();
-
+  const currentBranch =
+    argMap['-b'] ||
+    argMap['--branch'] ||
+    commandForCurrentBranch.stdout.toString().trim();
   if (!currentBranch) {
     throw new Error('Could not find current branch');
   }
+
+  const currentFile = argMap['-f'] || argMap['--file'] || '';
 
   // support SSH mode and HTTP mode
   const remoteUrlRegExp = /^(git@|https:\/\/)(.*).git$/;
@@ -34,7 +53,7 @@ export default function openOnRemote(): void {
   const completedUrl = `https://${repositoryUrl.replace(
     ':',
     '/',
-  )}/tree/${currentBranch}`;
+  )}/tree/${currentBranch}/${currentFile}`;
 
   // eslint-disable-next-line no-console
   console.log('Open on remote in default browser: \n', completedUrl);
@@ -47,6 +66,10 @@ export default function openOnRemote(): void {
       : 'xdg-open';
 
   cp.exec(start + ' ' + completedUrl);
+
+  if (process.env.NODE_ENV !== 'development') {
+    cp.exec(start + ' ' + completedUrl);
+  }
 }
 
 openOnRemote();

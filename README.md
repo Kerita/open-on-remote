@@ -12,5 +12,6 @@ type `or` in git project folder, then open-on-remote will open the current proje
 
 ## TODO
 
-- [ ] support custom branch name
-- [ ] support specified file
+- [x] support custom branch name
+- [x] support specified file
+- [ ] support dev env not open browser
