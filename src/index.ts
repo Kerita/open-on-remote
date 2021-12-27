@@ -3,8 +3,6 @@
 import cp = require('child_process');
 import process = require('process');
 
-console.log(process.argv);
-
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
 
