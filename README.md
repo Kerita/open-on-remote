@@ -12,7 +12,17 @@ type `or` in git project folder, then open-on-remote will open the current proje
 
 `-b` or `--branch` to set custom branch name.
 
+```
+or -b master
+or --branch master
+```
+
 `-f` or `--file` to set specified file.
+
+```
+or -f README.md
+or --file README.md
+```
 
 ## TODO
 
