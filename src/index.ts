@@ -63,8 +63,6 @@ export default function openOnRemote(): void {
       ? 'start'
       : 'xdg-open';
 
-  cp.exec(start + ' ' + completedUrl);
-
   if (process.env.NODE_ENV !== 'development') {
     cp.exec(start + ' ' + completedUrl);
   }
