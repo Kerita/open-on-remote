@@ -1,6 +1,6 @@
 {
   "name": "open-on-remote",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Open git project on remote in default browser.",
   "main": "index.js",
   "scripts": {
