@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var cp = require("child_process");
 var process = require("process");
-console.log(process.argv);
 var git = function (args) {
     return cp.spawnSync('git', args);
 };
@@ -48,7 +47,6 @@ function openOnRemote() {
         : process.platform == 'win32'
             ? 'start'
             : 'xdg-open';
-    cp.exec(start + ' ' + completedUrl);
     if (process.env.NODE_ENV !== 'development') {
         cp.exec(start + ' ' + completedUrl);
     }
