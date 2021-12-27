@@ -10,6 +10,9 @@ type `or` in git project folder, then open-on-remote will open the current proje
 
 `or` means open remote.
 
+`-b` or `--branch` to set custom branch name
+`-f` or `--file` to set specified file
+
 ## TODO
 
 - [x] support custom branch name
