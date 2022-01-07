@@ -3,18 +3,22 @@
 import cp = require('child_process');
 import process = require('process');
 
+const ARG_LIST = ['-b', '--branch', '-f', '--file'];
+
 const git = (args: string[]): cp.SpawnSyncReturns<string> =>
   cp.spawnSync('git', args);
 
 const getArgMap = (): { [key: string]: string } => {
   const args = process.argv.slice(2);
   const argMap: { [key: string]: string } = {};
-  args.forEach((item: string) => {
-    const [key, value] = item.split('=');
-    if (key && value) {
-      argMap[key] = value;
+  for (let i = 0; i < args.length; ) {
+    if (ARG_LIST.includes(args[i]) && !ARG_LIST.includes(args[i + 1])) {
+      argMap[args[i]] = args[i + 1];
+      i += 2;
+    } else {
+      i++;
     }
-  });
+  }
   return argMap;
 };
 
