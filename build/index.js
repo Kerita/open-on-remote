@@ -3,18 +3,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var cp = require("child_process");
 var process = require("process");
+var ARG_LIST = ['-b', '--branch', '-f', '--file'];
 var git = function (args) {
     return cp.spawnSync('git', args);
 };
 var getArgMap = function () {
     var args = process.argv.slice(2);
     var argMap = {};
-    args.forEach(function (item) {
-        var _a = item.split('='), key = _a[0], value = _a[1];
-        if (key && value) {
-            argMap[key] = value;
+    for (var i = 0; i < args.length;) {
+        if (ARG_LIST.includes(args[i]) && !ARG_LIST.includes(args[i + 1])) {
+            argMap[args[i]] = args[i + 1];
+            i += 2;
         }
-    });
+        else {
+            i++;
+        }
+    }
     return argMap;
 };
 function openOnRemote() {
