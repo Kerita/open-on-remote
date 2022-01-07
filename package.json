@@ -51,5 +51,9 @@
   },
   "bin": {
     "or": "./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kerita/open-on-remote"
   }
 }
