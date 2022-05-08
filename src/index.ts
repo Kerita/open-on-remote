@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 import cp = require('child_process');
 import process = require('process');
@@ -27,7 +28,8 @@ export default function openOnRemote(): void {
   const remoteUrl = commandForRemoteUrl.stdout.toString().trim();
 
   if (!remoteUrl) {
-    throw new Error('Could not find remote url');
+    console.error('Could not find remote url');
+    return;
   }
 
   const argMap = getArgMap();
@@ -38,18 +40,20 @@ export default function openOnRemote(): void {
     argMap['--branch'] ||
     commandForCurrentBranch.stdout.toString().trim();
   if (!currentBranch) {
-    throw new Error('Could not find current branch');
+    console.error('Could not find current branch');
+    return;
   }
 
   const currentFile = argMap['-f'] || argMap['--file'] || '';
 
   // support SSH mode and HTTP mode
-  const remoteUrlRegExp = /^(git@|https:\/\/)(.*).git$/;
+  const remoteUrlRegExp = /^(git(lab|hub)?@|https:\/\/)(.*).git$/;
   const matchResult = remoteUrl.match(remoteUrlRegExp);
-  const repositoryUrl = matchResult?.length ? matchResult[2] : '';
+  const repositoryUrl = matchResult?.length ? matchResult[3] : '';
 
   if (!repositoryUrl) {
-    throw new Error('Could not find repository url');
+    console.error('Could not find repository url');
+    return;
   }
 
   const completedUrl = `https://${repositoryUrl.replace(
@@ -57,7 +61,6 @@ export default function openOnRemote(): void {
     '/',
   )}/tree/${currentBranch}/${currentFile}`;
 
-  // eslint-disable-next-line no-console
   console.log('Open on remote in default browser: \n', completedUrl);
 
   const start =

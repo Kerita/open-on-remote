@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 "use strict";
+/* eslint-disable no-console */
 Object.defineProperty(exports, "__esModule", { value: true });
 var cp = require("child_process");
 var process = require("process");
@@ -25,7 +26,8 @@ function openOnRemote() {
     var commandForRemoteUrl = git(['config', '--get', 'remote.origin.url']);
     var remoteUrl = commandForRemoteUrl.stdout.toString().trim();
     if (!remoteUrl) {
-        throw new Error('Could not find remote url');
+        console.error('Could not find remote url');
+        return;
     }
     var argMap = getArgMap();
     var commandForCurrentBranch = git(['rev-parse', '--abbrev-ref', 'HEAD']);
@@ -33,18 +35,19 @@ function openOnRemote() {
         argMap['--branch'] ||
         commandForCurrentBranch.stdout.toString().trim();
     if (!currentBranch) {
-        throw new Error('Could not find current branch');
+        console.error('Could not find current branch');
+        return;
     }
     var currentFile = argMap['-f'] || argMap['--file'] || '';
     // support SSH mode and HTTP mode
-    var remoteUrlRegExp = /^(git@|https:\/\/)(.*).git$/;
+    var remoteUrlRegExp = /^(git(lab|hub)?@|https:\/\/)(.*).git$/;
     var matchResult = remoteUrl.match(remoteUrlRegExp);
-    var repositoryUrl = (matchResult === null || matchResult === void 0 ? void 0 : matchResult.length) ? matchResult[2] : '';
+    var repositoryUrl = (matchResult === null || matchResult === void 0 ? void 0 : matchResult.length) ? matchResult[3] : '';
     if (!repositoryUrl) {
-        throw new Error('Could not find repository url');
+        console.error('Could not find repository url');
+        return;
     }
     var completedUrl = "https://" + repositoryUrl.replace(':', '/') + "/tree/" + currentBranch + "/" + currentFile;
-    // eslint-disable-next-line no-console
     console.log('Open on remote in default browser: \n', completedUrl);
     var start = process.platform == 'darwin'
         ? 'open'
